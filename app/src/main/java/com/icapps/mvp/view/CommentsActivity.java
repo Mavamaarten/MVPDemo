@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,9 @@ public class CommentsActivity extends MvpActivity<CommentsView, CommentsPresente
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
         ButterKnife.bind(this);
+
+        setTitle("Post details");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         post = getIntent().getParcelableExtra("post");
         postBody.setText(post.getBody());
@@ -89,5 +93,14 @@ public class CommentsActivity extends MvpActivity<CommentsView, CommentsPresente
     @Override
     public void onRefresh() {
         presenter.loadComments(post.getId());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            supportFinishAfterTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

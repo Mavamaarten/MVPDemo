@@ -56,7 +56,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.postBody.setText(post.getBody());
         holder.postTitle.setText(post.getTitle());
         holder.itemView.setOnClickListener(v -> {
-            listener.onPostClicked(post, position);
+            listener.onPostClicked(post, position, holder.postTitle, holder.postBody);
         });
     }
 
@@ -66,6 +66,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public interface PostsAdapterListener{
-        void onPostClicked(Post post, int position);
+        void onPostClicked(Post post, int position, View titleView, View bodyView);
     }
 }

@@ -3,9 +3,12 @@ package com.icapps.mvp.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
@@ -70,9 +73,14 @@ public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implem
     }
 
     @Override
-    public void onPostClicked(Post post, int position) {
+    public void onPostClicked(Post post, int position, View titleView, View bodyView) {
         Intent intent = new Intent(this, CommentsActivity.class);
         intent.putExtra("post", post);
-        startActivity(intent);
+
+        Pair<View, String> p1 = Pair.create(titleView, "postTitle");
+        Pair<View, String> p2 = Pair.create(bodyView, "postBody");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2);
+
+        startActivity(intent, options.toBundle());
     }
 }
