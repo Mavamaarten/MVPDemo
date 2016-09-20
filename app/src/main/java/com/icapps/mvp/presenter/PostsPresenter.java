@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.icapps.mvp.model.PostRepository;
 import com.icapps.mvp.view.PostsView;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -12,6 +13,7 @@ import rx.schedulers.Schedulers;
  */
 public class PostsPresenter extends MvpBasePresenter<PostsView> {
     private PostRepository postRepository;
+    private Subscription subscription;
 
     public PostsPresenter(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -21,7 +23,7 @@ public class PostsPresenter extends MvpBasePresenter<PostsView> {
         if(!isViewAttached()) return;
         getView().setLoading(true);
 
-        postRepository.getPosts()
+        subscription = postRepository.getPosts()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(posts -> {
@@ -33,6 +35,12 @@ public class PostsPresenter extends MvpBasePresenter<PostsView> {
                     getView().showError(throwable);
                     getView().setLoading(false);
                 });
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if(subscription != null) subscription.unsubscribe();
     }
 
 }

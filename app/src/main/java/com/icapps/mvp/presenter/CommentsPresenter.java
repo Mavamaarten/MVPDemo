@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.icapps.mvp.model.PostRepository;
 import com.icapps.mvp.view.CommentsView;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -13,6 +14,7 @@ import rx.schedulers.Schedulers;
 public class CommentsPresenter extends MvpBasePresenter<CommentsView> {
 
     private PostRepository postRepository;
+    private Subscription subscription;
 
     public CommentsPresenter(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -22,7 +24,7 @@ public class CommentsPresenter extends MvpBasePresenter<CommentsView> {
         if(!isViewAttached()) return;
         getView().setLoading(true);
 
-        postRepository.getPostComments(postId)
+        subscription = postRepository.getPostComments(postId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(comments -> {
@@ -36,4 +38,9 @@ public class CommentsPresenter extends MvpBasePresenter<CommentsView> {
                 });
     }
 
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if(subscription != null) subscription.unsubscribe();
+    }
 }
