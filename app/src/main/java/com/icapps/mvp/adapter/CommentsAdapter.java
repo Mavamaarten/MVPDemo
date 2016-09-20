@@ -1,4 +1,4 @@
-package com.icapps.mvp.view.adapter;
+package com.icapps.mvp.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

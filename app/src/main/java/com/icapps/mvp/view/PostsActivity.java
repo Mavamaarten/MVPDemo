@@ -16,7 +16,7 @@ import com.icapps.mvp.MVPApplication;
 import com.icapps.mvp.R;
 import com.icapps.mvp.model.Post;
 import com.icapps.mvp.presenter.PostsPresenter;
-import com.icapps.mvp.view.adapter.PostsAdapter;
+import com.icapps.mvp.adapter.PostsAdapter;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_posts);
         ButterKnife.bind(this);
 
         swipeRefresh.setOnRefreshListener(this);

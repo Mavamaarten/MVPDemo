@@ -15,7 +15,7 @@ import com.icapps.mvp.R;
 import com.icapps.mvp.model.Comment;
 import com.icapps.mvp.model.Post;
 import com.icapps.mvp.presenter.CommentsPresenter;
-import com.icapps.mvp.view.adapter.CommentsAdapter;
+import com.icapps.mvp.adapter.CommentsAdapter;
 
 import java.util.List;
 
