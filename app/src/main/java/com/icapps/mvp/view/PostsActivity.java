@@ -73,6 +73,7 @@ public class PostsActivity extends MvpViewStateActivity<PostsView, PostsPresente
         presenter.loadPosts();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onPostClicked(Post post, int position, View titleView, View bodyView) {
         Intent intent = new Intent(this, CommentsActivity.class);
