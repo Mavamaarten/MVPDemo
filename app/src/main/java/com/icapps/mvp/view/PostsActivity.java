@@ -11,19 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
+import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
 import com.icapps.mvp.MVPApplication;
 import com.icapps.mvp.R;
+import com.icapps.mvp.adapter.PostsAdapter;
 import com.icapps.mvp.model.Post;
 import com.icapps.mvp.presenter.PostsPresenter;
-import com.icapps.mvp.adapter.PostsAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implements SwipeRefreshLayout.OnRefreshListener, PostsView, PostsAdapter.PostsAdapterListener {
+public class PostsActivity extends MvpViewStateActivity<PostsView, PostsPresenter> implements SwipeRefreshLayout.OnRefreshListener, PostsView, PostsAdapter.PostsAdapterListener {
     @BindView(R.id.rcv_posts)
     RecyclerView postsRecycler;
     @BindView(R.id.contentView)
@@ -42,8 +44,6 @@ public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implem
         postsAdapter = new PostsAdapter(this);
         postsRecycler.setAdapter(postsAdapter);
         postsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        presenter.loadPosts();
     }
 
     @NonNull
@@ -53,8 +53,9 @@ public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implem
     }
 
     @Override
-    public void setPosts(List<Post> data) {
-        postsAdapter.setPosts(data);
+    public void setPosts(List<Post> posts) {
+        postsAdapter.setPosts(posts);
+        ((PostsViewState)viewState).setPosts((ArrayList<Post>) posts);
     }
 
     @Override
@@ -82,5 +83,16 @@ public class PostsActivity extends MvpActivity<PostsView, PostsPresenter> implem
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2);
 
         startActivity(intent, options.toBundle());
+    }
+
+    @NonNull
+    @Override
+    public ViewState<PostsView> createViewState() {
+        return new PostsViewState();
+    }
+
+    @Override
+    public void onNewViewStateInstance() {
+        presenter.loadPosts();
     }
 }
